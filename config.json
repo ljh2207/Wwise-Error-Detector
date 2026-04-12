@@ -1,0 +1,6 @@
+{
+    "waapi_url": "ws://127.0.0.1:8080/waapi",
+    "anthropic_api_key": "",
+    "auto_fix_enabled": false,
+    "poll_interval_ms": 200
+}
