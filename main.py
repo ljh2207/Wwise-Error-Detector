@@ -18,10 +18,14 @@ import sys
 from PyQt5.QtWidgets import QApplication
 
 # 로그 설정
+_LOG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "error_detector.log")
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format="[%(asctime)s] %(levelname)s %(name)s: %(message)s",
     datefmt="%H:%M:%S",
+    handlers=[
+        logging.FileHandler(_LOG_PATH, encoding="utf-8"),
+    ],
 )
 logger = logging.getLogger("ErrorDetector")
 

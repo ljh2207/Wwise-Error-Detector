@@ -11,6 +11,11 @@ build/
 
 # 런타임 생성 파일
 selected_error.json
+analysis_cache.json
+error_detector.log
+
+# 민감 정보
+_gemini_secrets.py
 
 # 가상환경
 venv/

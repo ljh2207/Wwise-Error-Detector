@@ -111,8 +111,10 @@ def _get_object_info(waapi: WaapiManager, guid: str,
                      fields: list[str]) -> Optional[dict]:
     result = waapi.call(
         "ak.wwise.core.object.get",
-        {"from": {"id": [guid]}},
-        {"return": fields},
+        {
+            "from": {"id": [guid]},
+            "options": {"return": fields},
+        },
     )
     if result and result.get("return"):
         return result["return"][0]
@@ -128,8 +130,10 @@ def _get_master_bus_id(waapi: WaapiManager) -> Optional[str]:
     # WorkUnit 의 직접 자식 중 Bus 타입인 것이 루트 버스
     result = waapi.call(
         "ak.wwise.core.object.get",
-        {"waql": "$ where type = \"Bus\" and parent.type = \"WorkUnit\""},
-        {"return": ["id", "path", "name"]},
+        {
+            "waql": "$ where type = \"Bus\" and parent.type = \"WorkUnit\"",
+            "options": {"return": ["id", "path", "name"]},
+        },
     )
     if result and result.get("return"):
         root_bus = result["return"][0]
@@ -140,8 +144,10 @@ def _get_master_bus_id(waapi: WaapiManager) -> Optional[str]:
     for name in ["Master Audio Bus", "Main Audio Bus", "Master Bus"]:
         result = waapi.call(
             "ak.wwise.core.object.get",
-            {"waql": f"$ where type = \"Bus\" and name = \"{name}\""},
-            {"return": ["id"]},
+            {
+                "waql": f"$ where type = \"Bus\" and name = \"{name}\"",
+                "options": {"return": ["id"]},
+            },
         )
         if result and result.get("return"):
             return result["return"][0].get("id")

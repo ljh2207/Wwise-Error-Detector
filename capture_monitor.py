@@ -93,9 +93,12 @@ class CaptureMonitor:
             return None
         result = self.waapi.call(
             "ak.wwise.core.object.get",
-            {"from": {"id": [guid]}},
-            {"return": ["path", "name", "type"]},
+            {
+                "from": {"id": [guid]},
+                "options": {"return": ["path", "name", "type"]},
+            },
         )
+        logger.debug("resolve_object_path guid=%s → result=%s", guid, result)
         if result and result.get("return"):
             return result["return"][0].get("path")
         return None
@@ -116,8 +119,10 @@ class CaptureMonitor:
 
         result = self.waapi.call(
             "ak.wwise.core.object.get",
-            {"waql": f'$ where type = "AudioFileSource" and name = "{stem}"'},
-            {"return": ["id", "path", "name", "parent.id", "parent.path", "parent.name"]},
+            {
+                "waql": f'$ where type = "AudioFileSource" and name = "{stem}"',
+                "options": {"return": ["id", "path", "name", "parent.id", "parent.path", "parent.name"]},
+            },
         )
         if not (result and result.get("return")):
             return None, None, None
