@@ -69,8 +69,21 @@ def _save_cache(cache: dict) -> None:
         json.dump(cache, f, ensure_ascii=False, indent=2)
 
 
+def _replace_object_refs(text: str, old_name: str, old_path: str,
+                         new_name: str, new_path: str) -> str:
+    """캐시된 분석 텍스트에서 이전 오브젝트 이름·경로를 현재 것으로 교체."""
+    if old_name and new_name and old_name != new_name:
+        text = text.replace(old_name, new_name)
+    if old_path and new_path and old_path != new_path:
+        text = text.replace(old_path, new_path)
+    return text
+
+
 def _cache_get(error) -> str | None:
-    """캐시에서 동일 에러 유형의 분석 결과를 반환. 없으면 None."""
+    """캐시에서 동일 에러 유형의 분석 결과를 반환. 없으면 None.
+
+    캐시된 텍스트 안의 원본 오브젝트 이름·경로를 현재 에러의 것으로 교체해 반환한다.
+    """
     key = _cache_key(error)
     with _cache_lock:
         cache = _load_cache()
@@ -83,7 +96,15 @@ def _cache_get(error) -> str | None:
         cache[key] = entry
         _save_cache(cache)
     logger.info("캐시 히트: %s (총 %d회)", key[:60], entry["hit_count"])
-    return entry["analysis"]
+    analysis = entry["analysis"]
+    analysis = _replace_object_refs(
+        analysis,
+        old_name=entry.get("cached_object_name", ""),
+        old_path=entry.get("cached_object_path", ""),
+        new_name=error.object_name,
+        new_path=error.object_path or "",
+    )
+    return analysis
 
 
 def _cache_set(error, analysis: str, source: str) -> None:
@@ -97,6 +118,8 @@ def _cache_set(error, analysis: str, source: str) -> None:
             "error_code": error.error_code,
             "cause": error.cause,
             "example_description": error.description,
+            "cached_object_name": error.object_name,
+            "cached_object_path": error.object_path or "",
             "source": source,
             "hit_count": 0,
             "first_seen": now,
