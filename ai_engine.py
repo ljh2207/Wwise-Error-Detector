@@ -52,8 +52,9 @@ def _normalize_description(description: str) -> str:
     return re.sub(r'\s+', ' ', s)
 
 
-def _cache_key(error) -> str:
-    return f"{error.error_code}|{_normalize_description(error.description)}"
+def _cache_key(error, source: str | None = None) -> str:
+    base = f"{error.error_code}|{_normalize_description(error.description)}"
+    return f"{source}|{base}" if source else base
 
 
 def _load_cache() -> dict:
@@ -89,12 +90,13 @@ def _replace_object_refs(text: str, old_name: str, old_path: str,
     return text
 
 
-def _cache_get(error) -> str | None:
+def _cache_get(error, source: str | None = None) -> str | None:
     """캐시에서 동일 에러 유형의 분석 결과를 반환. 없으면 None.
 
+    source가 지정된 경우 해당 AI('claude' 또는 'gemini')가 저장한 결과만 반환한다.
     캐시된 텍스트 안의 원본 오브젝트 이름·경로를 현재 에러의 것으로 교체해 반환한다.
     """
-    key = _cache_key(error)
+    key = _cache_key(error, source)
     with _cache_lock:
         cache = _load_cache()
         entry = cache.get(key)
@@ -119,7 +121,7 @@ def _cache_get(error) -> str | None:
 
 def _cache_set(error, analysis: str, source: str) -> None:
     """분석 결과를 캐시에 저장. source는 'claude' 또는 'gemini'."""
-    key = _cache_key(error)
+    key = _cache_key(error, source)
     now = datetime.now().isoformat()
     with _cache_lock:
         cache = _load_cache()
@@ -349,7 +351,7 @@ def analyze(error, cancel_event: threading.Event | None = None) -> str:
     """
     _save(error)
 
-    cached = _cache_get(error)
+    cached = _cache_get(error, source="claude")
     if cached:
         return cached + "\n\n─── 캐시된 분석 결과입니다 (동일 에러 유형) ───"
 
@@ -429,7 +431,7 @@ def analyze_gemini(error, on_progress=None, cancel_event: threading.Event | None
     """
     _save(error)
 
-    cached = _cache_get(error)
+    cached = _cache_get(error, source="gemini")
     if cached:
         return cached + "\n\n─── 캐시된 분석 결과입니다 (동일 에러 유형) ───"
 
