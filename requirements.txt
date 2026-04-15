@@ -1,3 +1,2 @@
 waapi-client>=0.8.0
 PyQt5>=5.15.0
-anthropic>=0.20.0
