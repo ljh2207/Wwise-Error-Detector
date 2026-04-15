@@ -71,9 +71,19 @@ def _save_cache(cache: dict) -> None:
 
 def _replace_object_refs(text: str, old_name: str, old_path: str,
                          new_name: str, new_path: str) -> str:
-    """캐시된 분석 텍스트에서 이전 오브젝트 이름·경로를 현재 것으로 교체."""
+    """캐시된 분석 텍스트에서 이전 오브젝트 이름·경로를 현재 것으로 교체.
+
+    AI는 오브젝트 이름을 공백 그대로 쓰기도 하고,
+    파일명 형식(공백→언더스코어)으로 쓰기도 하므로 두 가지 모두 교체한다.
+    예) "Footsteps Grass Walk 3"  → "Footsteps Grass Walk 4"
+        "Footsteps_Grass_Walk_3" → "Footsteps_Grass_Walk_4"
+    """
     if old_name and new_name and old_name != new_name:
         text = text.replace(old_name, new_name)
+        old_file = old_name.replace(" ", "_")
+        new_file = new_name.replace(" ", "_")
+        if old_file != new_file:
+            text = text.replace(old_file, new_file)
     if old_path and new_path and old_path != new_path:
         text = text.replace(old_path, new_path)
     return text
