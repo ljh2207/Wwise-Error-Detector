@@ -840,8 +840,6 @@ class Dashboard(QMainWindow):
                     item = self._table.item(row, col)
                     if item:
                         item.setBackground(QColor(20, 60, 20))
-                # 수정 완료 후 프로젝트 저장
-                self.waapi.call("ak.wwise.core.project.save")
                 QMessageBox.information(self, "수정 완료", msg)
             else:
                 QMessageBox.warning(self, "수정 실패", msg)
