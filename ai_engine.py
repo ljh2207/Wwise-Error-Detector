@@ -16,12 +16,11 @@ import logging
 import os
 import re
 import socket
+import time
 import subprocess
 import sys
 import threading
-import time
 from datetime import datetime
-from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -253,7 +252,8 @@ def _ensure_no_mcp_dir():
             json.dump({"mcpServers": {}}, f)
 
 
-def _run_claude(prompt: str, cwd: str, timeout: int = 60) -> str:
+def _run_claude(prompt: str, cwd: str, timeout: int = 60,
+                cancel_event: threading.Event | None = None) -> str:
     """프롬프트를 파일로 저장 후 PowerShell을 통해 Claude에 전달한다.
 
     Windows cmd.exe는 다중 행 한국어 인수를 지원하지 않아
@@ -265,29 +265,38 @@ def _run_claude(prompt: str, cwd: str, timeout: int = 60) -> str:
         with open(prompt_file, "w", encoding="utf-8") as f:
             f.write(prompt)
 
-        # PowerShell로 파일 내용을 읽어 claude -p 인수로 전달
         ps_cmd = (
             f"$p = Get-Content '{prompt_file}' -Raw -Encoding UTF8; "
             f"claude -p $p --max-turns 1"
         )
-        result = subprocess.run(
+        proc = subprocess.Popen(
             ["powershell", "-NoProfile", "-Command", ps_cmd],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
             encoding="utf-8",
             cwd=cwd,
-            timeout=timeout,
             creationflags=subprocess.CREATE_NO_WINDOW,
         )
 
-        if result.returncode == 0 and result.stdout.strip():
-            return result.stdout.strip()
-        logger.error("Claude 오류: %s", result.stderr)
-        return f"분석 실패: {result.stderr or '알 수 없는 오류'}"
+        elapsed = 0.0
+        poll_interval = 0.2
+        while proc.poll() is None:
+            if cancel_event and cancel_event.is_set():
+                proc.kill()
+                return ""
+            time.sleep(poll_interval)
+            elapsed += poll_interval
+            if elapsed >= timeout:
+                proc.kill()
+                return f"분석 시간 초과 ({timeout}초). 다시 시도해주세요."
 
-    except subprocess.TimeoutExpired:
-        return f"분석 시간 초과 ({timeout}초). 다시 시도해주세요."
+        stdout, stderr = proc.communicate()
+        if proc.returncode == 0 and stdout.strip():
+            return stdout.strip()
+        logger.error("Claude 오류: %s", stderr)
+        return f"분석 실패: {stderr or '알 수 없는 오류'}"
+
     except FileNotFoundError:
         return "Claude CLI 또는 PowerShell을 찾을 수 없습니다."
     except Exception as e:
@@ -295,7 +304,7 @@ def _run_claude(prompt: str, cwd: str, timeout: int = 60) -> str:
         return f"분석 중 오류 발생: {e}"
 
 
-def analyze(error) -> str:
+def analyze(error, cancel_event: threading.Event | None = None) -> str:
     """Claude -p 로 에러를 분석해 결과 문자열을 반환한다.
 
     동일 에러 유형이 캐시에 있으면 AI 호출 없이 즉시 반환한다.
@@ -313,136 +322,77 @@ def analyze(error) -> str:
 
     prompt = _build_prompt(error)
     if _is_waapi_available():
-        result = _run_claude(prompt, cwd=_HERE)
+        result = _run_claude(prompt, cwd=_HERE, cancel_event=cancel_event)
     else:
         _ensure_no_mcp_dir()
-        result = _run_claude(prompt, cwd=_NO_MCP_DIR)
+        result = _run_claude(prompt, cwd=_NO_MCP_DIR, cancel_event=cancel_event)
 
-    # 분석 성공 시에만 캐시 저장 (실패·타임아웃 메시지는 제외)
+    # 분석 성공 시에만 캐시 저장 (실패·타임아웃·취소 메시지는 제외)
     if result and not result.startswith("분석 실패") and not result.startswith("분석 시간 초과"):
         _cache_set(error, result, source="claude")
 
     return result
 
 
-# ------------------------------------------------------------------
-# Gemini API 직접 호출 (CLI 우회 — OAuth 토큰 재사용)
-# ------------------------------------------------------------------
+def _run_gemini(prompt: str, cwd: str, timeout: int = 60,
+                cancel_event: threading.Event | None = None) -> str:
+    """프롬프트를 파일로 저장 후 PowerShell을 통해 Gemini에 전달한다.
 
-_GEMINI_OAUTH_CREDS = Path.home() / ".gemini" / "oauth_creds.json"
-_GEMINI_PROJECTS_JSON = Path.home() / ".gemini" / "projects.json"
-try:
-    from _gemini_secrets import GEMINI_CLIENT_ID as _GEMINI_CLIENT_ID
-    from _gemini_secrets import GEMINI_CLIENT_SECRET as _GEMINI_CLIENT_SECRET
-except ImportError:
-    _GEMINI_CLIENT_ID = ""
-    _GEMINI_CLIENT_SECRET = ""
-_GEMINI_TOKEN_URI = "https://oauth2.googleapis.com/token"
-# Gemini CLI 내부 엔드포인트 (cloudcode-pa)
-_GEMINI_API_URL = "https://cloudcode-pa.googleapis.com/v1internal:generateContent"
-# 쿼터 소진 시 순서대로 시도할 모델 목록
-_GEMINI_FALLBACK_MODELS = [
-    "gemini-3-flash-preview",
-    "gemini-3.1-flash-lite-preview",
-]
-
-
-def _gemini_access_token() -> str:
-    """~/.gemini/oauth_creds.json 에서 유효한 access_token을 반환한다.
-
-    만료된 경우 refresh_token으로 갱신 후 파일에 저장한다.
+    _run_claude()와 동일한 방식 — Windows cmd.exe의 다중 행 한국어 인수
+    깨짐 문제를 피하기 위해 파일 경유 후 PowerShell로 실행한다.
     """
-    import requests  # 함수 내 임포트 — 미설치 환경에서도 Claude 분석은 정상 동작
-
-    creds = json.loads(_GEMINI_OAUTH_CREDS.read_text(encoding="utf-8"))
-    expiry_ms = creds.get("expiry_date", 0)
-    if time.time() * 1000 < expiry_ms - 60_000:  # 1분 여유
-        return creds["access_token"]
-
-    # 토큰 갱신
-    resp = requests.post(_GEMINI_TOKEN_URI, data={
-        "client_id": _GEMINI_CLIENT_ID,
-        "client_secret": _GEMINI_CLIENT_SECRET,
-        "refresh_token": creds["refresh_token"],
-        "grant_type": "refresh_token",
-    }, timeout=10)
-    resp.raise_for_status()
-    new = resp.json()
-    creds["access_token"] = new["access_token"]
-    creds["expiry_date"] = int(time.time() * 1000) + new["expires_in"] * 1000
-    _GEMINI_OAUTH_CREDS.write_text(
-        json.dumps(creds, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
-    logger.info("Gemini OAuth 토큰 갱신 완료")
-    return creds["access_token"]
-
-
-def _get_gemini_project() -> str:
-    """projects.json 에서 Wwise-Error-Detector 디렉토리에 해당하는 project ID를 반환한다."""
+    prompt_file = os.path.join(cwd, "_prompt_gemini.txt")
     try:
-        projects = json.loads(_GEMINI_PROJECTS_JSON.read_text(encoding="utf-8"))
-        key = str(Path(_HERE)).lower()
-        for path, pid in projects.get("projects", {}).items():
-            if path.lower() == key:
-                return pid
-    except Exception:
-        pass
-    return "wwise-error-detector"  # 폴백
+        with open(prompt_file, "w", encoding="utf-8") as f:
+            f.write(prompt)
+
+        ps_cmd = (
+            f"$p = Get-Content '{prompt_file}' -Raw -Encoding UTF8; "
+            f"gemini -p $p --approval-mode plan"
+        )
+        proc = subprocess.Popen(
+            ["powershell", "-NoProfile", "-Command", ps_cmd],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding="utf-8",
+            cwd=cwd,
+            creationflags=subprocess.CREATE_NO_WINDOW,
+        )
+
+        elapsed = 0.0
+        poll_interval = 0.2
+        while proc.poll() is None:
+            if cancel_event and cancel_event.is_set():
+                proc.kill()
+                return ""
+            time.sleep(poll_interval)
+            elapsed += poll_interval
+            if elapsed >= timeout:
+                proc.kill()
+                return f"분석 시간 초과 ({timeout}초). 다시 시도해주세요."
+
+        stdout, stderr = proc.communicate()
+        if proc.returncode == 0 and stdout.strip():
+            return stdout.strip()
+        logger.error("Gemini 오류: %s", stderr)
+        return f"분석 실패: {stderr or '알 수 없는 오류'}"
+
+    except FileNotFoundError:
+        return "Gemini CLI 또는 PowerShell을 찾을 수 없습니다."
+    except Exception as e:
+        logger.error("Gemini 분석 예외: %s", e)
+        return f"분석 중 오류 발생: {e}"
 
 
-def _gemini_api_call(model: str, prompt: str, timeout: int = 30) -> str:
-    """Gemini CLI 내부 API(cloudcode-pa)를 직접 호출해 응답 텍스트를 반환한다.
-
-    CLI 에이전트 루프를 완전히 우회하므로 수 초 내 응답한다.
-    """
-    import requests
-    import uuid
-
-    token = _gemini_access_token()
-    project = _get_gemini_project()
-
-    gemini_md = Path(_HERE) / "GEMINI.md"
-    system_text = gemini_md.read_text(encoding="utf-8") if gemini_md.exists() else ""
-
-    payload = {
-        "model": model,
-        "project": project,
-        "user_prompt_id": str(uuid.uuid4()),
-        "request": {
-            "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-            "systemInstruction": {"parts": [{"text": system_text}]} if system_text else None,
-            "generationConfig": {"temperature": 0.3, "maxOutputTokens": 1024},
-        },
-    }
-
-    resp = requests.post(
-        _GEMINI_API_URL,
-        headers={"Authorization": f"Bearer {token}",
-                 "Content-Type": "application/json"},
-        json=payload,
-        timeout=timeout,
-    )
-    if resp.status_code == 429:
-        raise _QuotaExceededError(resp.text)
-    resp.raise_for_status()
-
-    data = resp.json()
-    # 응답 구조: { "response": { "candidates": [...] } }
-    candidates = data.get("response", {}).get("candidates", [])
-    if not candidates:
-        raise ValueError(f"응답에 candidates 없음: {data}")
-    return candidates[0]["content"]["parts"][0]["text"].strip()
-
-
-class _QuotaExceededError(Exception):
-    pass
-
-
-def analyze_gemini(error, on_progress=None) -> str:
-    """Gemini CLI(-p, --yolo, --max-turns 1)로 에러를 분석한다.
+def analyze_gemini(error, on_progress=None, cancel_event: threading.Event | None = None) -> str:
+    """Gemini -p 로 에러를 분석해 결과 문자열을 반환한다.
 
     동일 에러 유형이 캐시에 있으면 AI 호출 없이 즉시 반환한다.
-    쿼터 소진 시 _GEMINI_FALLBACK_MODELS 순서대로 다음 모델로 자동 전환한다.
+    Wwise 실행 중(WAAPI 포트 8080 응답):
+      _HERE 에서 sk-wwise MCP 포함 실행 → WAAPI 도구 활용 가능.
+    Wwise 꺼짐:
+      _no_mcp/ 에서 MCP 없이 실행 → 텍스트 분석만 수행.
     """
     _save(error)
 
@@ -451,30 +401,19 @@ def analyze_gemini(error, on_progress=None) -> str:
         return cached + "\n\n─── 캐시된 분석 결과입니다 (동일 에러 유형) ───"
 
     prompt = _build_prompt(error)
+    if on_progress:
+        on_progress("Gemini 분석 중...")
 
-    last_err = ""
-    for model in _GEMINI_FALLBACK_MODELS:
-        logger.info("Gemini CLI 분석 시작: %s", model)
-        if on_progress:
-            on_progress(f"Gemini 분석 중... ({model})")
-        result = _run_cli(
-            ["gemini", "-p", prompt, "--model", model, "--yolo", "--max-turns", "1"],
-            f"Gemini({model})",
-            on_progress=on_progress,
-        )
-        # 쿼터 소진은 _run_cli 내부에서 감지 후 메시지 반환
-        if "쿼터가 소진" in result:
-            last_err = result
-            if on_progress:
-                on_progress(f"쿼터 소진 — {model} → 다음 모델로 전환 중...")
-            continue
+    if _is_waapi_available():
+        result = _run_gemini(prompt, cwd=_HERE, cancel_event=cancel_event)
+    else:
+        _ensure_no_mcp_dir()
+        result = _run_gemini(prompt, cwd=_NO_MCP_DIR, cancel_event=cancel_event)
 
-        # 분석 성공 시에만 캐시 저장
-        if result and not result.startswith("분석 실패") and not result.startswith("분석 시간 초과"):
-            _cache_set(error, result, source="gemini")
-        return result
+    if result and not result.startswith("분석 실패") and not result.startswith("분석 시간 초과"):
+        _cache_set(error, result, source="gemini")
 
-    return f"Gemini 분석 실패: {last_err}"
+    return result
 
 
 def _save(error):

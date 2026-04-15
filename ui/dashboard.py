@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import queue
+import threading
 from datetime import datetime
 from typing import Optional
 
@@ -26,11 +27,16 @@ class _AnalysisWorker(QThread):
     """AI CLI 를 별도 스레드에서 실행해 UI 블로킹을 방지한다."""
     finished = pyqtSignal(str)   # 분석 결과 텍스트
     progress = pyqtSignal(str)   # 진행 상황 메시지 (재시도 등)
+    cancelled = pyqtSignal()     # 취소 완료
 
     def __init__(self, error, engine: str = "claude", parent=None):
         super().__init__(parent)
         self._error = error
         self._engine = engine   # "claude" | "gemini"
+        self._cancel_event = threading.Event()
+
+    def cancel(self):
+        self._cancel_event.set()
 
     def run(self):
         if self._engine == "gemini":
@@ -38,11 +44,16 @@ class _AnalysisWorker(QThread):
             result = analyze_gemini(
                 self._error,
                 on_progress=lambda msg: self.progress.emit(msg),
+                cancel_event=self._cancel_event,
             )
         else:
             from ai_engine import analyze
-            result = analyze(self._error)
-        self.finished.emit(result)
+            result = analyze(self._error, cancel_event=self._cancel_event)
+
+        if self._cancel_event.is_set():
+            self.cancelled.emit()
+        else:
+            self.finished.emit(result)
 
 logger = logging.getLogger(__name__)
 
@@ -760,14 +771,18 @@ class Dashboard(QMainWindow):
             QMessageBox.critical(self, "내보내기 실패", str(ex))
 
     def _on_claude_analyze(self):
+        # 분석 중이면 취소
+        if hasattr(self, '_worker') and self._worker and self._worker.isRunning():
+            self._worker.cancel()
+            return
         error = self._selected_error()
         if not error:
             return
-        self._btn_claude.setEnabled(False)
-        self._btn_claude.setText("분석 중...")
+        self._btn_claude.setText("분석 중... (취소)")
         self._detail_text.setPlainText("Claude 가 분석 중입니다. 잠시 기다려주세요...")
         self._worker = _AnalysisWorker(error, engine="claude")
         self._worker.finished.connect(lambda result: self._on_claude_done(error, result))
+        self._worker.cancelled.connect(self._on_claude_cancelled)
         self._worker.start()
 
     def _on_claude_done(self, error, result: str):
@@ -775,17 +790,24 @@ class Dashboard(QMainWindow):
         error.ai_analysis = result
         self._show_detail(error)
         self._btn_claude.setText("Claude 분석")
-        self._btn_claude.setEnabled(True)
+
+    def _on_claude_cancelled(self):
+        self._detail_text.setPlainText("분석이 취소되었습니다.")
+        self._btn_claude.setText("Claude 분석")
 
     def _on_gemini_analyze(self):
+        # 분석 중이면 취소
+        if hasattr(self, '_worker_gemini') and self._worker_gemini and self._worker_gemini.isRunning():
+            self._worker_gemini.cancel()
+            return
         error = self._selected_error()
         if not error:
             return
-        self._btn_gemini.setEnabled(False)
-        self._btn_gemini.setText("분석 중...")
+        self._btn_gemini.setText("분석 중... (취소)")
         self._detail_text.setPlainText("Gemini 가 분석 중입니다. 잠시 기다려주세요...")
         self._worker_gemini = _AnalysisWorker(error, engine="gemini")
         self._worker_gemini.finished.connect(lambda result: self._on_gemini_done(error, result))
+        self._worker_gemini.cancelled.connect(self._on_gemini_cancelled)
         self._worker_gemini.progress.connect(self._detail_text.setPlainText)
         self._worker_gemini.start()
 
@@ -794,7 +816,10 @@ class Dashboard(QMainWindow):
         error.gemini_analysis = result
         self._show_detail(error)
         self._btn_gemini.setText("Gemini 분석")
-        self._btn_gemini.setEnabled(True)
+
+    def _on_gemini_cancelled(self):
+        self._detail_text.setPlainText("분석이 취소되었습니다.")
+        self._btn_gemini.setText("Gemini 분석")
 
     def _on_fix(self):
         error = self._selected_error()
