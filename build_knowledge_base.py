@@ -193,7 +193,10 @@ def parse_html_file(path: str) -> dict | None:
         cause_summary = title[:80] if title else ""
 
     # solution_summary: 첫 번째 해결 단계 항목
-    solution_summary = _make_summary(solutions[0]) if solutions else "공식 문서를 참고하세요"
+    # 비구체적 안내("공식 문서를 참고하세요", "Capture Log에서 찾으세요" 등)는 빈 문자열로 처리
+    _VAGUE = ("공식 문서를 참고하세요", "Capture Log", "다음을 참조하세요")
+    raw_summary = _make_summary(solutions[0]) if solutions else ""
+    solution_summary = "" if any(p in raw_summary for p in _VAGUE) else raw_summary
 
     return {
         "title": title,

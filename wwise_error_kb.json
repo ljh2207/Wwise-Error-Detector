@@ -1,7 +1,7 @@
 {
   "_meta": {
     "wwise_version": "2025.1.5.9095",
-    "generated_at": "2026-04-16T17:39:06.316871",
+    "generated_at": "2026-04-16T18:16:09.920206",
     "source_path": "C:\\Audiokinetic\\Wwise2025.1.5.9095\\Authoring\\Help\\Contextual Help\\ko",
     "entry_count": 239
   },
@@ -94,7 +94,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 Sound Engine이 여전히 활성 상태일 때 AK::SoundEngine::Init 을 호출하면 발생합니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_AmbisonicNotAvailable": {
     "title": "Ambisonic is only available with 3D audio. 3D audio is not enabled in the Audio Device, reverting to standard configuration.",
@@ -232,7 +232,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "PlayStation의 코어 오디오 출력 시스템 초기화 도중 치명적인 오류가 발생했습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_AudioOut2UserCreateError": {
     "title": "sceAudioOut2UserCreate Failed.",
@@ -240,7 +240,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "개인 혹은 컨트롤러 스피커 출력 장치같이 특정 사용자에 대해 출력 장치를 초기화하는 데 필요한 사용자 아이디(userId)에 문제가 있습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_AudioOutOfRange": {
     "title": "Wwise audio out of range ...",
@@ -248,7 +248,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 AkInitSettings::bDebugOutOfRangeCheckEnabled 가 활성화된 경우에만 발생합니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_AudioOutOfRangeOnBus": {
     "title": "Wwise audio out of range ... , bus ID ...",
@@ -256,7 +256,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 AkInitSettings::bDebugOutOfRangeCheckEnabled 가 활성화된 경우에만 발생합니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_AudioOutOfRangeOnBusFx": {
     "title": "Wwise audio out of range. Bus Effect ..., bus ID ...",
@@ -264,7 +264,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 AkInitSettings::bDebugOutOfRangeCheckEnabled 가 활성화된 경우에만 발생합니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_AudioOutOfRangeRay": {
     "title": "Wwise audio out of range. ..., ray ...",
@@ -272,7 +272,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 AkInitSettings::bDebugOutOfRangeCheckEnabled 가 활성화된 경우에만 발생합니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_AudioSubsystemStoppedResponding": {
     "title": "Hardware audio subsystem stopped responding. Silent mode is enabled.",
@@ -280,7 +280,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 오디오 드라이버가 상당한 시간 동안 Wwise에 응답하지 않았음을 말합니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_AudioThreadResumed": {
     "title": "Audio thread resumed, audio restarts.",
@@ -288,7 +288,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 메시지는 게임이 OS에 의해 다시 포그라운드(활성 상태)로 전환되거나 모바일 장치에서 전화 통화가 종료되는 경우와 같이 게임 라이프 사이클 ...",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_AudioThreadSuspended": {
     "title": "Audio thread suspended. Audio output will be silent.",
@@ -296,7 +296,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 메시지는 게임이 OS에 의해 백그라운드로 전환되거나 모바일 장치에서 전화가 발생할 때와 같이 게임 라이프 사이클의 다양한 지점에서 나타납니다...",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_BankContainUneditableEffect": {
     "title": "Warning: Bank contains rendered source effects which can't be edited in Wwise.",
@@ -304,7 +304,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 'Render'로 표시된 Source 플러그인의 매개 변수를 실시간으로 변경하려고 시도했음을 말합니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_BankLoadFailed": {
     "title": "Bank Load Failed.",
@@ -456,7 +456,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "The sound engine encountered a file-related error when accessing the media sourc...",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_CannotPlaySource_InconsistentState": {
     "title": "Inconsistent source status.",
@@ -464,7 +464,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "사운드를 시작할 때 발생할 수 있는 일반적인 오류입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_CannotPlaySource_TimeSkip": {
     "title": "Error while computing virtual source elapsed time.",
@@ -472,7 +472,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "내부 오류입니다. 자세한 내용은 Audiokinetic 지원팀에 문의해 주세요",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_CannotPlaySource_VirtualOff": {
     "title": "Virtual source failed becoming physical.",
@@ -589,7 +589,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 Wwise SDK API로의 단일한 기능이 너무 커서 전체 명령 대기열에 들어 맞지 않을 경우 일어납니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_CrossFadeTransitionIgnored": {
     "title": "Cross-Fade transition ignored: Estimated length not available. Make sure sounds with Cross-Fade transitions virtual mode are set to \"Play from elapsed time\" and that only sounds with finite duration are used.",
@@ -637,7 +637,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이미 종료된 시퀀스에서 Dynamic Sequence 작업을 시도했습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_DynamicSequenceIdNotFound": {
     "title": "Dynamic Sequence ID not found.",
@@ -645,7 +645,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "열리지 않은 시퀀스 ID에서 Dynamic Sequence 작업을 시도했습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_EndPreConnectionError": {
     "title": "End of pre-connection errors.",
@@ -653,7 +653,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "게임 접속 시 접속 전 게임에서 발생한 모든 오류는 Capture Log 상단에 요약됩니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_ErrorWhileLoadingBank": {
     "title": "Error while loading bank.",
@@ -745,7 +745,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "AK::SoundEngine::PostEvent 에 관련된 모든 오류를 포괄하는 일반 오류입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_FeedbackOnAudioObjectsBus": {
     "title": "Unsupported feedback connection to Audio Objects bus.",
@@ -753,7 +753,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "보이스 그래프에서 감지된 활성화된 피드백 연결의 도착지가 Audio Objects 버스입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_FileFormatMismatch": {
     "title": "Source file is of different format than expected.",
@@ -811,7 +811,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 메시지는 Wwise가 아닌 게임 코드에서 가져온 자유 형식 메시지입니다",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_GameObjectIsNotEmitter": {
     "title": "The game object for an event was not registered as an emitter. Make sure the game object is registered as an emitter before using it to post an event.",
@@ -822,7 +822,7 @@
       "이 문제가 계속 생길 경우 Audiokinetic 지원팀에 연락해 주세요."
     ],
     "cause_summary": "이 오류는 Insufficient Memory 오류와 같이 이전에 생겼던 오류에 대한 후속 오류로 발생할 수 있습니다.",
-    "solution_summary": "동일한 Game Object와 관련된 다른 오류가 있는지 Capture Log를 검사하고 해당 오류를 먼저 수정하세요"
+    "solution_summary": ""
   },
   "ErrorCode_GameObjectNeverRegistered": {
     "title": "Unknown game object ID used in function ... This ID was not registered with AK::SoundEngine::RegisterGameObj before.",
@@ -897,7 +897,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "가장 마지막 오디오 디코딩 작업을 성공적으로 완료할 수 없었습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_HwVoicesSystemInitFailed": {
     "title": "The hardware-accelerated voice subsystem failed to initialize.",
@@ -905,7 +905,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "특정 오디오 형식을 디코딩해야 하는 하드웨어 하위 시스템이 사용 가능하지 않습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_IODevice": {
     "title": "Unknown IO device error. .. returned .. on file ...",
@@ -927,7 +927,7 @@
     ],
     "solutions": [],
     "cause_summary": "This error happens when terminating the sound engine if there are streamed files...",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_Impacter_FileAtIndex": {
     "title": "Plugin media at index ... not available.",
@@ -935,7 +935,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "Impacter 플러그인과 관련된 문제입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_Impacter_NoFiles": {
     "title": "No input files for Impact.",
@@ -943,7 +943,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "Impacter 플러그인과 관련된 문제입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_IncompatibleBankVersion": {
     "title": "Load bank failed : incompatible bank version.",
@@ -958,7 +958,7 @@
     ],
     "solutions": [],
     "cause_summary": "지정된 SoundBank가 게임의 사운드 엔진과 다른 버전의 Wwise 저작 도구로 생성되었기 때문에 로딩되지 않았습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_IncompatibleIOSettings": {
     "title": "I/O settings incompatible. 블록 크기는 1과 Granularity 및 Granularity의 전체 분수 사이여야 합니다.",
@@ -1074,7 +1074,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "지정된 매개 변수가 범위를 벗어났거나 함수에 대해 잘못된 값입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_JobMgrOutOfMemory": {
     "title": "Job Manager ran out of memory. Significant loss of performance or instability may occur.",
@@ -1167,7 +1167,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "Mastering Suite 플러그인 구성의 채널 게인이 다릅니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_MasteringSuite_InvalidConfiguration": {
     "title": "Invalid configuration for Mastering Suite; processing halted.",
@@ -1187,7 +1187,7 @@
       "다음을 참조하세요: “Memory allocation failed.”"
     ],
     "cause_summary": "Mastering Suite 플러그인에 메모리 할당 오류가 발생했습니다",
-    "solution_summary": "다음을 참조하세요: “Memory allocation failed.”"
+    "solution_summary": ""
   },
   "ErrorCode_MasteringSuite_Register": {
     "title": "Mastering Suite: Unable to register to the ... callback.",
@@ -1225,7 +1225,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 PS5에서 Mastering Suite 기능의 내부 오류입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_MasteringSuite_sceAudioOut2MasteringInit": {
     "title": "sceAudioOut2MasteringInit failed.",
@@ -1233,7 +1233,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 PS5에서 Mastering Suite 기능의 내부 오류입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_MasteringSuite_sceAudioOut2MasteringSetParam": {
     "title": "sceAudioOut2MasteringSetParam failed.",
@@ -1241,7 +1241,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 PS5에서 Mastering Suite 기능의 내부 오류입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_MasteringSuite_sceAudioOut2UserCreate": {
     "title": "sceAudioOut2UserCreate failed.",
@@ -1249,7 +1249,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 PS5에서 Mastering Suite 기능의 내부 오류입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_MasteringSuite_sceAudioOut2UserDestroy": {
     "title": "sceAudioOut2UserDestroy failed.",
@@ -1257,7 +1257,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 오류는 PS5에서 Mastering Suite 기능의 내부 오류입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_MaxAudioObjExceeded": {
     "title": "Microsoft Spatial Sound: Too many dynamic objects. Some sounds may not play.",
@@ -1312,7 +1312,7 @@
       "게임에 연결할 때 Remote Connections 대화에 있는 목록에서 Profile Only 를 선택하세요. 그렇게 하면 게임으로의 실시간 미디어 업데이트가 방지됩니다."
     ],
     "cause_summary": "Wwise가 게임에 연결되었을 경우 Wwise 프로젝트에 추가되었거나 변경된 미디어로 게임을 업데이트하려고 시도하게 됩니다.",
-    "solution_summary": "Capture Log에서 파일 실패에 대한 단서를 찾으세요"
+    "solution_summary": ""
   },
   "ErrorCode_MediaNotLoaded": {
     "title": "Media was not loaded for this source.",
@@ -1327,7 +1327,7 @@
       "Capture Log에서 PrepareEvent() 나 PrepareEvent() 에 관한 근거를 찾아보세요."
     ],
     "cause_summary": "Wwise가 사운드 재생을 위해 미디어를 찾으려 하지만 로딩되지 않았습니다.",
-    "solution_summary": "Capture Log에 SoundBank 실패와 관련된 근거를 찾아보세요"
+    "solution_summary": ""
   },
   "ErrorCode_MediaUpdatedFromWwise": {
     "title": "Media updated: ... transferred from Wwise Project. Glitches might be heard. Previous media from other sources (bank, prepared, etc) will be ignored.",
@@ -1343,7 +1343,7 @@
     ],
     "solutions": [],
     "cause_summary": "지정된 미디어 파일이 Wwise 프로젝트에서 추가되거나 변경되었습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_MemoryAllocationFailed": {
     "title": "Memory allocation failed.",
@@ -1395,7 +1395,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "Modulator가 전역적인 범위로 작동하게 됩니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_ModulatorScopeError_Obj": {
     "title": "Triggered a game-object-scoped modulator in a global context (such as a bus or bus effect). Modulator will have global scope.",
@@ -1403,7 +1403,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "Modulator가 전역적인 범위로 작동하게 됩니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_MonitorMsgTooLarge": {
     "title": "Monitor Queue message is too large. Increase the size of uMonitorQueuePoolSize. Message size ... bytes.",
@@ -1450,7 +1450,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "음악 시스템이 다른 위치로 빠른이동하는 데 실패했습니다 (아마도 다른 세그먼트로의 전환을 시작하기 위해).",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_NXDeviceRegistrationFailed": {
     "title": "NX audio device notification registration failed, output format changes will not be detected.",
@@ -1512,7 +1512,7 @@
     ],
     "solutions": [],
     "cause_summary": "Switch Container가 트리거되었지만 어떤 사운드도 재생할 수 없었음을 말합니다",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_NodeNotCompatibleWithMidi": {
     "title": "Container is not compatible with MIDI playback.",
@@ -1520,7 +1520,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "The container targeted for MIDI playback cannot be in Continuous mode.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_NonCompliantDeviceMemory": {
     "title": "Non-compliant device memory detected. Device memory is required for hardware acceleration.",
@@ -1541,7 +1541,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "대부분의 API 함수 호출은 일부 메모리를 할당합니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_NotEnoughMemoryToStart": {
     "title": "Not enough memory to start sound.",
@@ -1549,7 +1549,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "사운드를 재생하는 데 필요한 모든 버퍼와 구조를 할당하기에 메모리가 충분하지 않았습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_NotEnoughSystemObj": {
     "title": "System does not meet minimum requirement for System Audio Objects. System Audio Objects will be mixed.",
@@ -1654,7 +1654,7 @@
     ],
     "solutions": [],
     "cause_summary": "사운드 엔진이 Opus로 인코딩된 음원을 찾을 수 없습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_OutputAlreadyExists": {
     "title": "AK::SoundEngine::AddOutput: Output already exists, not added a second time. Shareset: ... Device: ...",
@@ -1673,7 +1673,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "AK::SoundEngine::AddOutput 호출을 완료하거나 시스템에 오디오 출력을 추가할 수 없습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_PendingActionDestroyed": {
     "title": "Pending action was destroyed because a critical memory allocation failed.",
@@ -1681,7 +1681,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "메모리 부족으로 인해 Event의 Action 딜레이 혹은 반복을 사용하는 Sequence/Random Container가 예약되지 못했습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_PlayFailed": {
     "title": "Play Failed.",
@@ -1692,7 +1692,7 @@
       "Capture Log에서 오류를 선택하고 연결된 점 표시기를 따라가서 연관된 모든 알림 메시지를 확인하세요. 그 중 하나가 실패의 원인에 대한 이유를 표시해 줄 것입니다."
     ],
     "cause_summary": "Event를 완료할 수 없음을 나타내는 일반 오류입니다.",
-    "solution_summary": "Capture Log에서 해당 오류의 윗줄을 확인하세요"
+    "solution_summary": ""
   },
   "ErrorCode_PlayingIDAlreadyExists": {
     "title": "Playing ID already exists. New playing IDs must be generated when posting events.",
@@ -1848,7 +1848,7 @@
       "플러그인 판매자에게 지원을 요쳥하세요."
     ],
     "cause_summary": "이 오류는 열거된 플러그인 (소스, 효과, 믹서, 싱크)이 특정 플러그인의 내부적인 이유로 초기화에 실패했습니다.",
-    "solution_summary": "Capture Log에서 그 외 오류 메시지를 확인하세요"
+    "solution_summary": ""
   },
   "ErrorCode_PluginMediaUnavailable": {
     "title": "Plug-in media unavailable.",
@@ -1872,7 +1872,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 메시지는 서드파티 플러그인의 커스텀 메시지입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_PluginMsgWithShareSet": {
     "title": "Plug-in ... Shareset ...",
@@ -1880,7 +1880,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 메시지는 서드파티 플러그인의 커스텀 메시지입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_PluginNotRegistered": {
     "title": "Plug-in not found.",
@@ -1950,7 +1950,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "게임 접속 시 접속 전 게임에서 발생한 모든 오류는 Capture Log 상단에 요약됩니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_RemovingGeometryInstanceFailed": {
     "title": "AK::SpatialAudio::RemoveGeometryInstance: error removing a geometry instance.",
@@ -1960,7 +1960,7 @@
     ],
     "solutions": [],
     "cause_summary": "AK::SpatialAudio::RemoveGeometryInstance 를 사용하여 지오메트리를 설정할 때 오류가 발생했습니다",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_RemovingGeometrySetFailed": {
     "title": "AK::SpatialAudio::RemoveGeometry: error removing geometry set.",
@@ -1972,7 +1972,7 @@
     ],
     "solutions": [],
     "cause_summary": "AK::SpatialAudio::RemoveGeometry 를 사용하여 지오메트리을 제거하는 동안 오류가 발생했습니다",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_ResetPlaylistActionIgnoredContinuous": {
     "title": "Reset Playlist action on a continuous container is ignored.",
@@ -2002,7 +2002,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 메시지는 항상 다른 오류 다음에 나타납니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_RevertingToDummyAudioDevice": {
     "title": "Reverting to Dummy Audio device (no output).",
@@ -2010,7 +2010,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "이 메시지는 항상 다른 오류 다음에 나타납니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_SeekAfterEndOfPlaylist": {
     "title": "Ignoring seek after end of playlist.",
@@ -2078,7 +2078,7 @@
       "SoundBank가 테스트 콘솔에 제대로 배포되었는지 확인하세요."
     ],
     "cause_summary": "사운드가 재생을 위해 선택되었으나 로딩되지 않았습니다.",
-    "solution_summary": "Capture Log를 확인하고 해당 오류를 선택해 주세요."
+    "solution_summary": ""
   },
   "ErrorCode_SetBusConfigUnsupported": {
     "title": "SetBusConfig and ResetBusConfig cannot modify master bus speaker configuration, it is dictated by the output device.",
@@ -2097,7 +2097,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "This error occurs when setting an Effect on an object in the Containers hierarch...",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_SetGameObjectRadiusSizeError": {
     "title": "AK::SpatialAudio::SetGameObjectRadius: Outer radius must be greater than inner radius.",
@@ -2118,7 +2118,7 @@
     ],
     "solutions": [],
     "cause_summary": "AK::SpatialAudio::SetGeometry 를 사용하여 지오메트리를 설정할 때 오류가 발생했습니다",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_SetGeometryInstanceFailed": {
     "title": "AK::SpatialAudio::SetGeometryInstance: error setting a geometry instance.",
@@ -2129,7 +2129,7 @@
     ],
     "solutions": [],
     "cause_summary": "AK::SpatialAudio::SetGeometryInstance 를 사용하여 지오메트리를 설정할 때 오류가 발생했습니다",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_SetGeometryInstanceInvalidTransform": {
     "title": "AK::SpatialAudio::SetGeometryInstance - Transform is not valid.",
@@ -2139,7 +2139,7 @@
     ],
     "solutions": [],
     "cause_summary": "AK::SpatialAudio::SetGeometryInstance 에 제공된 변환이 제대로 정의되지 않았습니다",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_SetGeometryTooManyTriangleConnected": {
     "title": "AK::SpatialAudio::SetGeometry - More than two triangles are connected to the same edge.",
@@ -2305,7 +2305,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "Soundseed Grain 플러그인에 관련된 문제입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_SoundseedGrain_MediaUnavailable": {
     "title": "Media not available.",
@@ -2313,7 +2313,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "Soundseed Grain 플러그인에 관련된 문제입니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_SoundseedGrain_SeekFailed": {
     "title": "Seek failed due to seeking past end of file.",
@@ -2344,7 +2344,7 @@
       "다음을 참조하세요: “Memory allocation failed.”"
     ],
     "cause_summary": "Soundseed Grain 플러그인에 관련된 문제입니다.",
-    "solution_summary": "다음을 참조하세요: “Memory allocation failed.”"
+    "solution_summary": ""
   },
   "ErrorCode_SourcePluginNotFound": {
     "title": "Source plug-in not found in currently loaded banks.",
@@ -2427,7 +2427,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "사운드 엔진에서 예상치 못한 오류가 발생했습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_SwitchListEmpty": {
     "title": "Switch Group ... has no Switch Values at all. Switch container will do nothing.",
@@ -2474,7 +2474,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "한 컨테이너 (Random, Sequence, Blend)에 하위 오브젝트가 너무 많습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_TooManySimultaneousMusicSegments": {
     "title": "Cannot schedule music segments: Stopping music.",
@@ -2562,7 +2562,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "AK::SoundEngine::PrepareGameSyncs 는 AkInitSettings::bEnableGameSyncPreparation 이...",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_UnknownArgument": {
     "title": "Unknown Argument Value name.",
@@ -2570,7 +2570,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "AK::SoundEngine::DynamicDialogue::ResolveDialogueEvent 로의 호출에서 주어진 Argument가 Wwi...",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_UnknownDialogueEvent": {
     "title": "Unknown Dialogue Event: ...",
@@ -2578,7 +2578,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "AK::SoundEngine::DynamicDialogue::ResolveDialogueEvent 로의 호출이 주어진 Dialogue Event...",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_UnknownGameObject": {
     "title": "Unknown/Dead game object ID used in <FunctionName>. Make sure the game object is registered before using it and do not use it once it was unregistered.",
@@ -2614,7 +2614,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "AK::SoundEngine::UnloadBank 호출이 기존 뱅크에 매개 변수로 전달된 SoundBank ID와 연결되지 못했습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_VirtualVoiceLimit": {
     "title": "Number of Resume and/or Play-From-Beginning virtual voices has reached warning limit (see Project Settings > Log tab). There may be some infinite, leaked voices.",
@@ -2622,7 +2622,7 @@
     "causes": [],
     "solutions": [],
     "cause_summary": "가상 보이스의 개수가 상당한 개수에 도달했으며 게임에 버그가 있거나 Wwise 프로젝트에 설정이 잘못됨을 표시합니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_VoiceStarving": {
     "title": "Voice starvation.",
@@ -2685,7 +2685,7 @@
     ],
     "solutions": [],
     "cause_summary": "사운드 엔진이 Vorbis로 인코딩된 음원의 빠른이동(seek)을 수행할 수 없었습니다.",
-    "solution_summary": "공식 문서를 참고하세요"
+    "solution_summary": ""
   },
   "ErrorCode_WrongNumberOfArguments": {
     "title": "Wrong number of Arguments for Dialogue Event argument list in function: ... Expected ..., got ...",

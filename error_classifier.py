@@ -169,7 +169,7 @@ def classify_error(description: str,
     2. Regex 패턴 (기존 규칙 기반 — fix_available 정보 포함)
     3. 미분류 (AI 분석 필요)
     """
-    # regex 패턴 결과를 먼저 확인 (fix_available 정보 추출용)
+    # 1) regex 패턴 매칭 (fix_available 정보 포함)
     combined = f"{description} {error_code}"
     regex_cause, regex_solution, regex_fixable = "", "", False
     for pattern, cause, solution, fixable in _PATTERNS:
@@ -177,14 +177,15 @@ def classify_error(description: str,
             regex_cause, regex_solution, regex_fixable = cause, solution, fixable
             break
 
-    # KB 조회: 공식 문서 원인/해결 텍스트 사용, fix_available은 regex 결과 유지
-    kb_entry = _KB.get(error_code)
-    if kb_entry:
-        return kb_entry["cause_summary"], kb_entry["solution_summary"], regex_fixable
-
-    # regex 폴백
+    # 2) regex 매칭 우선 — 사람이 작성한 요약이 더 직관적
     if regex_cause:
         return regex_cause, regex_solution, regex_fixable
+
+    # 3) KB 조회 (regex 미매칭 시)
+    kb_entry = _KB.get(error_code)
+    if kb_entry:
+        sol = kb_entry["solution_summary"] or "AI 분석 버튼을 눌러 Claude의 진단을 받아보세요"
+        return kb_entry["cause_summary"], sol, False
 
     return (
         "알 수 없는 에러 (AI 분석 필요)",
