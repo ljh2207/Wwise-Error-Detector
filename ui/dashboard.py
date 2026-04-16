@@ -655,6 +655,10 @@ class Dashboard(QMainWindow):
                     lines.append(f"  • {de.error_code}: {de.description}")
             if len(derivative_indices) > 10:
                 lines.append(f"  ... 외 {len(derivative_indices) - 10}개")
+        if error.ai_analyzed and error.ai_analysis:
+            lines += ["─" * 60, "[ Claude 분석 결과 ]", "", error.ai_analysis]
+        if error.gemini_analyzed and error.gemini_analysis:
+            lines += ["─" * 60, "[ Gemini 분석 결과 ]", "", error.gemini_analysis]
         kb = get_kb_entry(error.error_code)
         if kb:
             kb_lines = ["─" * 60, "[ 공식 Wwise 문서 ]", ""]
@@ -670,10 +674,6 @@ class Dashboard(QMainWindow):
                 for s in kb["solutions"]:
                     kb_lines.append(f"  • {s}")
             lines += kb_lines
-        if error.ai_analyzed and error.ai_analysis:
-            lines += ["─" * 60, "[ Claude 분석 결과 ]", "", error.ai_analysis]
-        if error.gemini_analyzed and error.gemini_analysis:
-            lines += ["─" * 60, "[ Gemini 분석 결과 ]", "", error.gemini_analysis]
         self._detail_text.setPlainText("\n".join(lines))
 
     def _selected_error(self) -> Optional[WwiseError]:
