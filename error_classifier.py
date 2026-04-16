@@ -2,6 +2,8 @@
 에러 분류 모듈
 Capture Log에서 수신한 에러 메시지를 분석해 원인과 해결 방법을 분류한다.
 """
+import json
+import os
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -133,13 +135,57 @@ _PATTERNS: list[tuple[str, str, str, bool]] = [
 ]
 
 
+# ------------------------------------------------------------------
+# 공식 Wwise 에러 문서 Knowledge Base
+# ------------------------------------------------------------------
+
+_KB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "wwise_error_kb.json")
+
+
+def _load_kb() -> dict:
+    try:
+        with open(_KB_PATH, encoding="utf-8") as f:
+            data = json.load(f)
+        data.pop("_meta", None)
+        return data
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+_KB: dict = _load_kb()
+
+
+def get_kb_entry(error_code: str) -> dict | None:
+    """에러 코드에 대한 공식 Wwise 문서 전체 엔트리를 반환. 없으면 None."""
+    return _KB.get(error_code)
+
+
 def classify_error(description: str,
                    error_code: str = "") -> tuple[str, str, bool]:
-    """에러 설명을 분석해 (원인, 해결방법, 자동수정가능) 튜플을 반환."""
+    """에러 설명을 분석해 (원인, 해결방법, 자동수정가능) 튜플을 반환.
+
+    우선순위:
+    1. Knowledge Base (공식 Wwise 문서, error_code 키로 O(1) 조회)
+    2. Regex 패턴 (기존 규칙 기반 — fix_available 정보 포함)
+    3. 미분류 (AI 분석 필요)
+    """
+    # regex 패턴 결과를 먼저 확인 (fix_available 정보 추출용)
     combined = f"{description} {error_code}"
+    regex_cause, regex_solution, regex_fixable = "", "", False
     for pattern, cause, solution, fixable in _PATTERNS:
         if re.search(pattern, combined, re.IGNORECASE):
-            return cause, solution, fixable
+            regex_cause, regex_solution, regex_fixable = cause, solution, fixable
+            break
+
+    # KB 조회: 공식 문서 원인/해결 텍스트 사용, fix_available은 regex 결과 유지
+    kb_entry = _KB.get(error_code)
+    if kb_entry:
+        return kb_entry["cause_summary"], kb_entry["solution_summary"], regex_fixable
+
+    # regex 폴백
+    if regex_cause:
+        return regex_cause, regex_solution, regex_fixable
+
     return (
         "알 수 없는 에러 (AI 분석 필요)",
         "AI 분석 버튼을 눌러 Claude의 진단을 받아보세요",

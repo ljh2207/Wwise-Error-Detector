@@ -174,7 +174,8 @@ _PROMPT_TEMPLATE = """아래 Wwise 런타임 에러를 분석하세요.
 
 
 def _build_prompt(error) -> str:
-    return _PROMPT_TEMPLATE.format(
+    from error_classifier import get_kb_entry
+    base = _PROMPT_TEMPLATE.format(
         object_path=error.object_path or "(경로 없음)",
         object_name=error.object_name,
         object_id=error.object_id or "(없음)",
@@ -183,6 +184,20 @@ def _build_prompt(error) -> str:
         description=error.description,
         cause_auto=error.cause,
     )
+    kb = get_kb_entry(error.error_code)
+    if kb:
+        causes_text = "; ".join(kb.get("causes", [])) or "(없음)"
+        solutions_text = "; ".join(kb.get("solutions", [])) or "(없음)"
+        kb_section = (
+            "\n--- 공식 Wwise 문서 (참고용) ---\n"
+            f"제목: {kb['title']}\n"
+            f"설명: {kb.get('description', '')}\n"
+            f"유력한 원인: {causes_text}\n"
+            f"권장 해결 단계: {solutions_text}\n\n"
+            "위 공식 문서를 참고하되, 이 특정 오브젝트와 에러 상황에 맞게 분석하세요.\n"
+        )
+        base += kb_section
+    return base
 
 
 def _run_cli(cmd: list[str], cli_name: str, timeout: int = 120,

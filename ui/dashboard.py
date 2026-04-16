@@ -20,7 +20,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout, QWidget,
 )
 
-from error_classifier import WwiseError, make_error, reset_counter
+from error_classifier import WwiseError, make_error, reset_counter, get_kb_entry
 
 
 class _AnalysisWorker(QThread):
@@ -655,6 +655,21 @@ class Dashboard(QMainWindow):
                     lines.append(f"  • {de.error_code}: {de.description}")
             if len(derivative_indices) > 10:
                 lines.append(f"  ... 외 {len(derivative_indices) - 10}개")
+        kb = get_kb_entry(error.error_code)
+        if kb:
+            kb_lines = ["─" * 60, "[ 공식 Wwise 문서 ]", ""]
+            kb_lines.append(f"제목: {kb['title']}")
+            if kb.get("description"):
+                kb_lines += ["", kb["description"]]
+            if kb.get("causes"):
+                kb_lines += ["", "유력한 원인:"]
+                for c in kb["causes"]:
+                    kb_lines.append(f"  • {c}")
+            if kb.get("solutions"):
+                kb_lines += ["", "권장 해결 단계:"]
+                for s in kb["solutions"]:
+                    kb_lines.append(f"  • {s}")
+            lines += kb_lines
         if error.ai_analyzed and error.ai_analysis:
             lines += ["─" * 60, "[ Claude 분석 결과 ]", "", error.ai_analysis]
         if error.gemini_analyzed and error.gemini_analysis:
