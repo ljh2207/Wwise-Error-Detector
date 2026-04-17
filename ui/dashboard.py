@@ -601,6 +601,12 @@ class Dashboard(QMainWindow):
             error = self._errors[indices[0]]
             self._show_detail(error, group_count=len(indices),
                               derivative_indices=derivative_indices)
+            # 그룹 행에서는 단일 오브젝트 대상 액션 비활성화
+            self._btn_focus.setEnabled(False)
+            self._btn_fix.setEnabled(False)
+            self._btn_claude.setEnabled(True)
+            self._btn_gemini.setEnabled(True)
+            return
         elif isinstance(data, dict) and data.get("type") == "derivative":
             idx = data["idx"]
             if idx >= len(self._errors):
